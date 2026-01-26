@@ -1,0 +1,8 @@
+services:
+  - type: worker
+    name: delirium-mc-openai-bots
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
