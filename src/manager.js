@@ -17,7 +17,7 @@ function genName(prefix) {
 }
 
 // ✅ Versión estable para bots (si tienes ViaVersion puedes usar 1.20.4)
-const FALLBACK_VERSION = "1.20.4";
+const FALLBACK_VERSION = "1.21.1";
 
 export class BotsManager {
   constructor() {
