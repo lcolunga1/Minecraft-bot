@@ -49,7 +49,7 @@ export class BotsManager {
       host: process.env.MC_HOST,
       port: Number(process.env.MC_PORT || 25565),
       username,
-      version: process.env.MC_VERSION || "1.21.11",
+      version: process.env.MC_VERSION || "1.21.10",
       auth: "offline"
     });
 
