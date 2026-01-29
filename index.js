@@ -1,4 +1,5 @@
 import "dotenv/config";
+
 import { startHttpServer } from "./src/http.js";
 import { createLogger } from "./src/logger.js";
 import { createReputationStore } from "./src/reputation.js";
