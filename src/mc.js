@@ -1,6 +1,8 @@
 import mineflayer from "mineflayer";
-import { pathfinder, Movements, goals } from "mineflayer-pathfinder";
+import pkg from "mineflayer-pathfinder";
 import { Vec3 } from "vec3";
+
+const { pathfinder, Movements, goals } = pkg;
 
 function distance(a, b) {
   if (!a || !b) return null;
@@ -31,8 +33,8 @@ export function createMinecraftBot({ logger, brain, reputation }) {
     const pos = bot.entity?.position;
 
     const playersNearby = Object.values(bot.players || {})
-      .filter(p => p?.entity)
-      .map(p => ({ name: p.username, dist: distance(p.entity.position, pos) }))
+      .filter((p) => p?.entity)
+      .map((p) => ({ name: p.username, dist: distance(p.entity.position, pos) }))
       .sort((a, b) => (a.dist ?? 9999) - (b.dist ?? 9999))
       .slice(0, 10);
 
@@ -103,8 +105,8 @@ export function createMinecraftBot({ logger, brain, reputation }) {
 
     if (type === "attack_nearest_mob") {
       const range = Number(args.range ?? 4);
-      const target = bot.nearestEntity(e =>
-        e.type === "mob" && e.position.distanceTo(bot.entity.position) <= range
+      const target = bot.nearestEntity(
+        (e) => e.type === "mob" && e.position.distanceTo(bot.entity.position) <= range
       );
       if (!target) return { ok: false, error: "no_mob_target" };
       bot.attack(target);
@@ -112,15 +114,15 @@ export function createMinecraftBot({ logger, brain, reputation }) {
     }
 
     if (type === "inventory_summary") {
-      const items = bot.inventory.items().map(i => ({ name: i.name, count: i.count }));
+      const items = bot.inventory.items().map((i) => ({ name: i.name, count: i.count }));
       return { ok: true, items };
     }
 
     if (type === "idle_roam") {
       // caminar un poco cerca (exploración leve)
       const pos = bot.entity.position;
-      const dx = Math.floor((Math.random() * 12) - 6);
-      const dz = Math.floor((Math.random() * 12) - 6);
+      const dx = Math.floor(Math.random() * 12 - 6);
+      const dz = Math.floor(Math.random() * 12 - 6);
       bot.pathfinder.setGoal(new goals.GoalNear(pos.x + dx, pos.y, pos.z + dz, 2));
       return { ok: true, roam: { dx, dz } };
     }
@@ -154,7 +156,6 @@ export function createMinecraftBot({ logger, brain, reputation }) {
         results.push({ action, result: r });
       }
       logger.log({ type: "ai_results", kind, attackerName, results });
-
     } catch (err) {
       logger.log({ type: "error", where: "decideAndAct", error: String(err) });
       bot.chat("Me bugueé 😵‍💫. Intenta de nuevo.");
@@ -185,10 +186,22 @@ export function createMinecraftBot({ logger, brain, reputation }) {
     const m = message.toLowerCase();
 
     // señales amistosas / tóxicas (heurística simple)
-    if (m.includes("gracias") || m.includes("ty") || m.includes("thx") || m.includes("pls") || m.includes("porfa")) {
+    if (
+      m.includes("gracias") ||
+      m.includes("ty") ||
+      m.includes("thx") ||
+      m.includes("pls") ||
+      m.includes("porfa")
+    ) {
       reputation.markFriendly(username, "chat amable");
     }
-    if (m.includes("noob") || m.includes("idiota") || m.includes("pendejo") || m.includes("ez") || m.includes("trash")) {
+    if (
+      m.includes("noob") ||
+      m.includes("idiota") ||
+      m.includes("pendejo") ||
+      m.includes("ez") ||
+      m.includes("trash")
+    ) {
       reputation.markRude(username, "chat tóxico");
     }
 
@@ -208,8 +221,8 @@ export function createMinecraftBot({ logger, brain, reputation }) {
 
     const pos = bot.entity.position;
     const nearest = Object.values(bot.players || {})
-      .filter(p => p?.entity)
-      .map(p => ({ name: p.username, dist: p.entity.position.distanceTo(pos) }))
+      .filter((p) => p?.entity)
+      .map((p) => ({ name: p.username, dist: p.entity.position.distanceTo(pos) }))
       .sort((a, b) => a.dist - b.dist)[0];
 
     const attackerName = nearest?.name || null;
