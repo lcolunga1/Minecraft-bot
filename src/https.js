@@ -1,13 +1,17 @@
-import express from "express";
+import "dotenv/config";
 
-export function startHttpServer() {
-  const app = express();
-  const PORT = Number(process.env.PORT || 10000);
+import { startHttpServer } from "./src/http.js";
+import { createLogger } from "./src/logger.js";
+import { createReputationStore } from "./src/reputation.js";
+import { createBrain } from "./src/ai.js";
+import { createMinecraftBot } from "./src/mc.js";
 
-  app.get("/", (_, res) => res.status(200).send("DeliriumAI OK"));
-  app.get("/health", (_, res) => res.json({ ok: true, ts: Date.now() }));
+startHttpServer();
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`[HTTP] listening on 0.0.0.0:${PORT}`);
-  });
-}
+const logger = createLogger();
+const reputation = createReputationStore();
+const brain = createBrain({ logger });
+
+createMinecraftBot({ logger, brain, reputation });
+
+console.log(`[BOOT] logs -> ${logger.file}`);
