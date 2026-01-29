@@ -1,0 +1,18 @@
+{
+  "name": "delirium-ai",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mineflayer": "^4.23.0",
+    "mineflayer-pathfinder": "^2.4.5",
+    "openai": "^4.0.0",
+    "vec3": "^0.1.10",
+    "zod": "^3.23.8"
+  }
+}
